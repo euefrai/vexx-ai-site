@@ -102,7 +102,7 @@ export default function HeroNovo() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Link href="/download">
+              <a href="/downloads/Vexx-AI-Setup.exe" download>
                 <motion.button
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
@@ -111,7 +111,7 @@ export default function HeroNovo() {
                   <Download className="w-5 h-5" />
                   Baixar para Windows
                 </motion.button>
-              </Link>
+              </a>
               <Link href="/demo">
                 <motion.button
                   whileHover={{ scale: 1.02, y: -2 }}

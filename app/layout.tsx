@@ -7,9 +7,9 @@ import Footer from "@/components/layout/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Vexx-AI | Your AI that actually DOES things",
-  description: "Vexx-AI is a desktop AI assistant that controls your computer, executes commands, and runs autonomous agents safely.",
-  keywords: ["AI assistant", "automation", "remote control", "Vexx-AI", "autonomous agents"],
+  title: "Vexx-AI | A IA que controla seu computador",
+  description: "Vexx-AI é uma IA de desktop que vê sua tela, entende o contexto e executa tarefas no seu computador automaticamente. 100% local, com suas próprias APIs.",
+  keywords: ["IA", "automação", "controle remoto", "Vexx-AI", "agente autônomo", "assistente desktop", "IA local"],
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="pt-BR" className="dark">
       <body className={`${inter.className} antialiased`}>
         <div className="noise-overlay" />
         <div className="bg-mesh" />

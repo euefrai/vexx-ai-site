@@ -53,7 +53,7 @@ export default function DownloadCTA() {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            <Link href="/download">
+            <a href="/downloads/Vexx-AI-Setup.exe" download>
               <motion.button
                 whileHover={{ scale: 1.05, y: -4 }}
                 whileTap={{ scale: 0.98 }}
@@ -63,6 +63,9 @@ export default function DownloadCTA() {
                 Baixar Vexx agora
                 <ArrowRight className="w-5 h-5" />
               </motion.button>
+            </a>
+            <Link href="/download" className="block mt-4 text-sm text-zinc-400 hover:text-accent-cyan transition-colors">
+              Outras plataformas e requisitos →
             </Link>
           </motion.div>
 
