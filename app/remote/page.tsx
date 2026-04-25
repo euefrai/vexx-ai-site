@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Smartphone, Monitor, ShieldCheck, Zap, ArrowRight, MousePointer2 } from "lucide-react";
+import Image from "next/image";
 import Button from "@/components/ui/Button";
 import GlassCard from "@/components/ui/GlassCard";
 
@@ -28,11 +29,12 @@ export default function RemotePage() {
                  <div className="relative h-full w-full bg-slate-900 overflow-hidden">
                     {/* Fake Desktop View on Phone */}
                     <div className="absolute inset-0 opacity-40 grayscale scale-150 origin-top">
-                       <img 
-                          src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" 
-                          className="w-full h-full object-cover"
-                          alt="Desktop"
-                       />
+                        <Image 
+                           src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" 
+                           fill
+                           className="object-cover"
+                           alt="Desktop"
+                        />
                     </div>
                     
                     {/* Control Overlay */}

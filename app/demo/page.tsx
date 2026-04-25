@@ -18,6 +18,7 @@ import {
   Play,
   Bot
 } from "lucide-react";
+import Image from "next/image";
 import GlassCard from "@/components/ui/GlassCard";
 import Button from "@/components/ui/Button";
 
@@ -187,9 +188,10 @@ export default function DemoPage() {
                    <GlassCard className="p-6 overflow-hidden relative">
                       <h4 className="text-sm font-bold mb-6 text-white/40 uppercase tracking-widest">Remote View</h4>
                       <div className="aspect-video bg-black/40 rounded-xl border border-white/5 flex items-center justify-center relative overflow-hidden group">
-                         <img 
+                         <Image 
                            src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" 
-                           className="w-full h-full object-cover opacity-20 grayscale"
+                           fill
+                           className="object-cover opacity-20 grayscale"
                            alt="Desktop Simulation"
                          />
                          <div className="absolute inset-0 flex items-center justify-center">
