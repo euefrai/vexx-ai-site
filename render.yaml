@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: vexx-ai-site
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_VERSION
+        value: 20.11.1
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
