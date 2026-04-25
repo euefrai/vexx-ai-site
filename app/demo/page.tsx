@@ -15,7 +15,8 @@ import {
   User,
   LayoutDashboard,
   MousePointer,
-  Play
+  Play,
+  Bot
 } from "lucide-react";
 import GlassCard from "@/components/ui/GlassCard";
 import Button from "@/components/ui/Button";
