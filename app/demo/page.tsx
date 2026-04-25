@@ -9,7 +9,6 @@ import {
   Network, 
   Terminal, 
   Send,
-  Search,
   Settings,
   Bell,
   User,
@@ -54,35 +53,39 @@ export default function DemoPage() {
 
   return (
     <div className="pt-32 pb-20">
-      <div className="container mx-auto px-6">
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold">Interactive <span className="text-accent-cyan text-glow-cyan">Experience.</span></h1>
-          <p className="text-white/40">Explore the Vexx-AI dashboard interface.</p>
-        </div>
+      <div className="container-page">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12"
+        >
+          <h1 className="h-display mb-6">Interactive <span className="gradient-text">Experience.</span></h1>
+          <p className="lead max-w-2xl">Explore the Vexx-AI dashboard interface and see the AI in action.</p>
+        </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1 hidden lg:flex flex-col gap-8 items-center py-8 glass rounded-2xl">
              <div className="w-10 h-10 rounded-xl bg-accent-cyan flex items-center justify-center text-black">
                 <LayoutDashboard size={20} />
              </div>
-             <Activity size={20} className="text-white/20" />
-             <Network size={20} className="text-white/20" />
-             <Settings size={20} className="text-white/20" />
+             <Activity size={20} className="text-zinc-500" />
+             <Network size={20} className="text-zinc-500" />
+             <Settings size={20} className="text-zinc-500" />
              <div className="mt-auto">
-                <User size={20} className="text-white/20" />
+                <User size={20} className="text-zinc-500" />
              </div>
           </div>
 
           {/* Main Dashboard Area */}
-          <div className="lg:col-span-11 space-y-8">
+          <div className="lg:col-span-11 space-y-6 md:space-y-8">
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <GlassCard className="p-6 flex items-center gap-6">
                    <div className="w-12 h-12 rounded-full bg-accent-cyan/10 flex items-center justify-center">
                       <Cpu size={24} className="text-accent-cyan" />
                    </div>
                    <div>
-                      <p className="text-xs text-white/40 uppercase font-bold tracking-widest">CPU LOAD</p>
+                      <p className="text-xs text-zinc-500 uppercase font-bold tracking-widest">CPU LOAD</p>
                       <p className="text-2xl font-bold">{cpuUsage}%</p>
                    </div>
                 </GlassCard>
@@ -91,7 +94,7 @@ export default function DemoPage() {
                       <Activity size={24} className="text-accent-purple" />
                    </div>
                    <div>
-                      <p className="text-xs text-white/40 uppercase font-bold tracking-widest">MEMORY</p>
+                      <p className="text-xs text-zinc-500 uppercase font-bold tracking-widest">MEMORY</p>
                       <p className="text-2xl font-bold">{ramUsage}%</p>
                    </div>
                 </GlassCard>
@@ -100,13 +103,13 @@ export default function DemoPage() {
                       <HardDrive size={24} className="text-accent-green" />
                    </div>
                    <div>
-                      <p className="text-xs text-white/40 uppercase font-bold tracking-widest">STORAGE</p>
+                      <p className="text-xs text-zinc-500 uppercase font-bold tracking-widest">STORAGE</p>
                       <p className="text-2xl font-bold">1.2 TB</p>
                    </div>
                 </GlassCard>
              </div>
 
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                 {/* Chat Simulation Area */}
                 <div className="lg:col-span-2 space-y-6">
                    <div className="glass rounded-3xl overflow-hidden flex flex-col h-[600px]">
@@ -121,14 +124,14 @@ export default function DemoPage() {
                             </div>
                          </div>
                          <div className="flex gap-4">
-                            <Bell size={18} className="text-white/20" />
-                            <Settings size={18} className="text-white/20" />
+                            <Bell size={18} className="text-zinc-500" />
+                            <Settings size={18} className="text-zinc-500" />
                          </div>
                       </div>
                       
                       <div className="flex-grow p-8 overflow-y-auto space-y-8 font-mono text-sm">
                          <div className="bg-white/5 p-6 rounded-2xl rounded-tl-none max-w-2xl">
-                            <p className="text-white/70">Welcome back, Efraim. I'm ready to assist. You have 4 pending automations and 12 notifications from Slack.</p>
+                            <p className="text-zinc-300">Welcome back, Efraim. I'm ready to assist. You have 4 pending automations and 12 notifications from Slack.</p>
                          </div>
                          
                          {streamingText && (
@@ -162,7 +165,7 @@ export default function DemoPage() {
                 {/* Status / Monitoring Area */}
                 <div className="lg:col-span-1 space-y-6">
                    <GlassCard className="p-6">
-                      <h4 className="text-sm font-bold mb-6 text-white/40 uppercase tracking-widest">Active Agents</h4>
+                      <h4 className="text-sm font-bold mb-6 text-zinc-500 uppercase tracking-widest">Active Agents</h4>
                       <div className="space-y-4">
                          <div className="flex items-center justify-between p-3 rounded-xl bg-white/5">
                             <div className="flex items-center gap-3">
@@ -180,13 +183,13 @@ export default function DemoPage() {
                                </div>
                                <span className="text-sm font-medium">JUH Researcher</span>
                             </div>
-                            <div className="px-2 py-0.5 rounded bg-white/10 text-[10px] text-white/40 font-bold uppercase">Standby</div>
+                            <div className="px-2 py-0.5 rounded bg-white/10 text-[10px] text-zinc-500 font-bold uppercase">Standby</div>
                          </div>
                       </div>
                    </GlassCard>
 
                    <GlassCard className="p-6 overflow-hidden relative">
-                      <h4 className="text-sm font-bold mb-6 text-white/40 uppercase tracking-widest">Remote View</h4>
+                      <h4 className="text-sm font-bold mb-6 text-zinc-500 uppercase tracking-widest">Remote View</h4>
                       <div className="aspect-video bg-black/40 rounded-xl border border-white/5 flex items-center justify-center relative overflow-hidden group">
                          <Image 
                            src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" 
@@ -197,7 +200,7 @@ export default function DemoPage() {
                          <div className="absolute inset-0 flex items-center justify-center">
                             <div className="flex flex-col items-center gap-2">
                                <MousePointer size={24} className="text-accent-cyan animate-pulse" />
-                               <span className="text-[10px] text-white/40">REMOTE_CURSOR_01</span>
+                               <span className="text-[10px] text-zinc-500">REMOTE_CURSOR_01</span>
                             </div>
                          </div>
                          <div className="absolute top-2 left-2 flex gap-1">

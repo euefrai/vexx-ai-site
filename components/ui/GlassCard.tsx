@@ -8,23 +8,23 @@ interface GlassCardProps {
   children: React.ReactNode;
   className?: string;
   hoverEffect?: boolean;
+  delay?: number;
 }
 
 export default function GlassCard({
   children,
   className,
   hoverEffect = true,
+  delay = 0,
 }: GlassCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={hoverEffect ? { y: -5, borderColor: "rgba(255, 255, 255, 0.2)" } : {}}
-      className={cn(
-        "glass-card p-6 border border-white/5",
-        className
-      )}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={hoverEffect ? { y: -6, scale: 1.01 } : undefined}
+      className={cn("glass-card p-7 md:p-8", className)}
     >
       {children}
     </motion.div>

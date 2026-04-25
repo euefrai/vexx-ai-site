@@ -4,10 +4,27 @@ import React from "react";
 import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+type Variant = "primary" | "secondary" | "outline" | "ghost" | "neon";
+type Size = "sm" | "md" | "lg";
+
 interface ButtonProps extends HTMLMotionProps<"button"> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "neon";
-  size?: "sm" | "md" | "lg";
+  variant?: Variant;
+  size?: Size;
 }
+
+const variantClass: Record<Variant, string> = {
+  primary: "btn-primary",
+  secondary: "btn-secondary",
+  outline: "btn-outline",
+  ghost: "btn-ghost",
+  neon: "btn-neon",
+};
+
+const sizeClass: Record<Size, string> = {
+  sm: "px-4 py-2 text-sm",
+  md: "px-5 py-2.5 text-sm md:text-base",
+  lg: "px-7 py-3.5 text-base md:text-lg font-semibold",
+};
 
 export default function Button({
   variant = "primary",
@@ -16,30 +33,12 @@ export default function Button({
   children,
   ...props
 }: ButtonProps) {
-  const variants = {
-    primary: "bg-white text-black hover:bg-white/90",
-    secondary: "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md",
-    outline: "bg-transparent border border-white/20 text-white hover:bg-white/5",
-    ghost: "bg-transparent text-white/70 hover:text-white hover:bg-white/5",
-    neon: "bg-accent-cyan/10 text-accent-cyan border border-accent-cyan/20 hover:bg-accent-cyan/20 shadow-[0_0_15px_rgba(0,245,255,0.2)]",
-  };
-
-  const sizes = {
-    sm: "px-4 py-1.5 text-sm",
-    md: "px-6 py-2.5 text-base",
-    lg: "px-8 py-4 text-lg font-semibold",
-  };
-
   return (
     <motion.button
-      whileHover={{ scale: 1.02 }}
+      whileHover={{ scale: 1.02, y: -1 }}
       whileTap={{ scale: 0.98 }}
-      className={cn(
-        "rounded-full transition-all duration-200 flex items-center justify-center gap-2",
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className={cn("btn-base", variantClass[variant], sizeClass[size], className)}
       {...props}
     >
       {children}

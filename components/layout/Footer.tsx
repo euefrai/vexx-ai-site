@@ -2,69 +2,99 @@
 
 import React from "react";
 import Link from "next/link";
-import { Cpu, Github, Twitter, Linkedin } from "lucide-react";
+import { Github, Twitter, MessageCircle, Heart } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 bg-black/50 border-t border-white/5 py-20 overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-1 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-cyan to-accent-purple flex items-center justify-center">
-                <Cpu className="text-white w-5 h-5" />
-              </div>
-              <span className="text-lg font-bold tracking-tight text-white">Vexx-AI</span>
-            </Link>
-            <p className="text-white/50 text-sm leading-relaxed max-w-xs">
-              The next generation of desktop AI. Empowering you to automate everything, from anywhere.
+    <footer className="border-t border-white/5 py-16">
+      <div className="container-page">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Brand */}
+          <div className="md:col-span-1">
+            <h3 className="text-2xl font-bold mb-4">Vexx-AI</h3>
+            <p className="text-zinc-500 text-sm leading-relaxed">
+              The AI that thinks, plans, and executes on your computer.
             </p>
           </div>
 
+          {/* Product Links */}
           <div>
-            <h4 className="text-white font-semibold mb-6">Product</h4>
-            <ul className="space-y-4">
-              <li><Link href="/features" className="text-white/50 hover:text-white transition-colors text-sm">Features</Link></li>
-              <li><Link href="/how-it-works" className="text-white/50 hover:text-white transition-colors text-sm">How it Works</Link></li>
-              <li><Link href="/demo" className="text-white/50 hover:text-white transition-colors text-sm">Live Demo</Link></li>
-              <li><Link href="/pricing" className="text-white/50 hover:text-white transition-colors text-sm">Pricing</Link></li>
+            <h4 className="font-bold mb-4 text-zinc-400">Product</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/download" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Download
+                </Link>
+              </li>
+              <li>
+                <Link href="/features" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/demo" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Demo
+                </Link>
+              </li>
             </ul>
           </div>
 
+          {/* Company Links */}
           <div>
-            <h4 className="text-white font-semibold mb-6">Company</h4>
-            <ul className="space-y-4">
-              <li><Link href="/security" className="text-white/50 hover:text-white transition-colors text-sm">Security</Link></li>
-              <li><Link href="/policies" className="text-white/50 hover:text-white transition-colors text-sm">Privacy Policy</Link></li>
-              <li><Link href="/policies" className="text-white/50 hover:text-white transition-colors text-sm">Terms of Service</Link></li>
+            <h4 className="font-bold mb-4 text-zinc-400">Company</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/security" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Security
+                </Link>
+              </li>
+              <li>
+                <Link href="/policies" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Policies
+                </Link>
+              </li>
+              <li>
+                <a href="https://github.com/vexx-ai" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  GitHub
+                </a>
+              </li>
+              <li>
+                <a href="https://discord.gg/vexx" className="text-zinc-500 hover:text-white transition-colors text-sm">
+                  Discord
+                </a>
+              </li>
             </ul>
           </div>
 
+          {/* Social */}
           <div>
-            <h4 className="text-white font-semibold mb-6">Connect</h4>
+            <h4 className="font-bold mb-4 text-zinc-400">Connect</h4>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all">
-                <Twitter className="w-5 h-5" />
+              <a href="https://github.com/vexx-ai" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <Github size={18} className="text-zinc-400" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all">
-                <Github className="w-5 h-5" />
+              <a href="https://twitter.com/vexx-ai" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <Twitter size={18} className="text-zinc-400" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all">
-                <Linkedin className="w-5 h-5" />
+              <a href="https://discord.gg/vexx" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-colors">
+                <MessageCircle size={18} className="text-zinc-400" />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/30 text-xs">
-            © 2024 Vexx-AI. All rights reserved. Built with precision.
+        <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-zinc-600 text-sm">
+            2024 Vexx-AI. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <span className="text-[10px] text-white/20 uppercase tracking-widest">Local-First</span>
-            <span className="text-[10px] text-white/20 uppercase tracking-widest">End-to-End Encrypted</span>
-            <span className="text-[10px] text-white/20 uppercase tracking-widest">Open Source Core</span>
-          </div>
+          <p className="text-zinc-600 text-sm flex items-center gap-2">
+            Made with <Heart size={14} className="text-accent-red" /> for the future of computing
+          </p>
         </div>
       </div>
     </footer>
