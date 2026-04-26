@@ -46,15 +46,22 @@ async function syncSubscription(stripe: Stripe, subscriptionId: string) {
       ? planFromSubscription(sub)
       : "free";
 
-  // Upsert the subscription row
+  // Stripe API ≥ 2025-03 moved `current_period_end` onto subscription items.
+  // Read from the first item, which holds the billing period for our
+  // single-price subscriptions.
+  const item = sub.items.data[0];
+  const periodEndUnix = item?.current_period_end ?? null;
+
   await supabase.from("subscriptions").upsert(
     {
       user_id: profile.id,
       stripe_customer_id: customerId,
       stripe_subscription_id: sub.id,
-      stripe_price_id: sub.items.data[0]?.price.id ?? null,
+      stripe_price_id: item?.price.id ?? null,
       status: sub.status,
-      current_period_end: new Date(sub.current_period_end * 1000).toISOString(),
+      current_period_end: periodEndUnix
+        ? new Date(periodEndUnix * 1000).toISOString()
+        : null,
       cancel_at_period_end: sub.cancel_at_period_end,
     },
     { onConflict: "stripe_subscription_id" }
@@ -112,11 +119,10 @@ export async function POST(request: NextRequest) {
       case "invoice.paid":
       case "invoice.payment_failed": {
         const invoice = event.data.object as Stripe.Invoice;
-        if (invoice.subscription) {
-          const subId =
-            typeof invoice.subscription === "string"
-              ? invoice.subscription
-              : invoice.subscription.id;
+        // Stripe API ≥ 2025-03 nests this under parent.subscription_details.
+        const sub = invoice.parent?.subscription_details?.subscription ?? null;
+        if (sub) {
+          const subId = typeof sub === "string" ? sub : sub.id;
           await syncSubscription(stripe, subId);
         }
         break;
