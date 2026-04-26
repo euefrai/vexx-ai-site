@@ -2,8 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, X, User } from "lucide-react";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 const navLinks = [
   { name: "Como funciona", href: "/how-it-works" },
@@ -16,7 +18,10 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [authReady, setAuthReady] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -28,6 +33,29 @@ export default function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      setAuthReady(true);
+      return;
+    }
+    const supabase = createClient();
+    let active = true;
+    supabase.auth.getUser().then(({ data }) => {
+      if (!active) return;
+      setUser(data.user);
+      setAuthReady(true);
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setAuthReady(true);
+      router.refresh();
+    });
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, [router]);
 
   return (
     <nav
@@ -56,9 +84,7 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    active
-                      ? "text-ink"
-                      : "text-ink-muted hover:text-ink"
+                    active ? "text-ink" : "text-ink-muted hover:text-ink"
                   }`}
                 >
                   {link.name}
@@ -67,13 +93,28 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/download"
-              className="btn btn-primary btn-sm"
-            >
-              Baixar
-            </Link>
+          <div className="hidden lg:flex items-center gap-2">
+            {!authReady ? (
+              <div className="w-24 h-8" />
+            ) : user ? (
+              <Link
+                href="/settings"
+                className="btn btn-secondary btn-sm"
+                aria-label="Configurações"
+              >
+                <User size={14} />
+                Conta
+              </Link>
+            ) : (
+              <>
+                <Link href="/login" className="btn btn-ghost btn-sm">
+                  Entrar
+                </Link>
+                <Link href="/download" className="btn btn-primary btn-sm">
+                  Baixar
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -98,12 +139,26 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Link
-              href="/download"
-              className="btn btn-primary btn-md mt-3 w-full"
-            >
-              Baixar
-            </Link>
+            <div className="mt-3 flex flex-col gap-2">
+              {user ? (
+                <Link
+                  href="/settings"
+                  className="btn btn-secondary btn-md w-full"
+                >
+                  <User size={14} />
+                  Minha conta
+                </Link>
+              ) : (
+                <>
+                  <Link href="/login" className="btn btn-secondary btn-md w-full">
+                    Entrar
+                  </Link>
+                  <Link href="/download" className="btn btn-primary btn-md w-full">
+                    Baixar
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
