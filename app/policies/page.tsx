@@ -4,92 +4,61 @@ import React from "react";
 import { motion } from "framer-motion";
 import GlassCard from "@/components/ui/GlassCard";
 
+const sections = [
+  {
+    title: "Política de privacidade",
+    paragraphs: [
+      "No Vexx-AI levamos sua privacidade a sério. Nossa arquitetura local-first garante que seus dados permaneçam na sua máquina.",
+      "Não coletamos, armazenamos ou transmitimos qualquer dado pessoal aos nossos servidores. Todo processamento acontece localmente.",
+      "Quando você usa modelos em nuvem (OpenAI, Anthropic, etc.), está interagindo diretamente com esses serviços sob seus próprios termos.",
+    ],
+  },
+  {
+    title: "Termos de serviço",
+    paragraphs: [
+      'Ao usar o Vexx-AI, você concorda com estes termos. O software é fornecido "como está", sem garantias.',
+      "O Vexx-AI está em beta. Reservamos o direito de modificar recursos, preços e disponibilidade durante o desenvolvimento.",
+      "Você é responsável por garantir que seu uso esteja em conformidade com leis e regulamentos aplicáveis.",
+    ],
+  },
+  {
+    title: "Coleta de dados",
+    paragraphs: [
+      "Vexx-AI não coleta telemetria ou dados de uso. Não rastreamos como você usa o software.",
+      "Relatórios de erro opcionais podem ser enviados para melhorar a estabilidade, mas isso pode ser desativado nas configurações.",
+    ],
+  },
+  {
+    title: "Contato",
+    paragraphs: [
+      "Para dúvidas sobre estas políticas, entre em contato em legal@vexx-ai.com",
+    ],
+  },
+];
+
 export default function PoliciesPage() {
   return (
-    <div className="pt-32 pb-20">
-      <div className="container-page">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <h1 className="h-display mb-12">Policies.</h1>
-          </motion.div>
-          
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-            >
-              <GlassCard className="p-8 md:p-10">
-                <h2 className="h-card mb-6">Privacy Policy</h2>
-                <div className="space-y-4 text-body text-zinc-400">
-                  <p>
-                    At Vexx-AI, we take your privacy seriously. Our local-first architecture ensures that your data stays on your machine.
-                  </p>
-                  <p>
-                    We do not collect, store, or transmit any personal data to our servers. All processing happens locally on your computer.
-                  </p>
-                  <p>
-                    When you use cloud-based AI models (OpenAI, Anthropic, etc.), you are directly interacting with those services under their terms of service.
-                  </p>
-                </div>
-              </GlassCard>
-            </motion.div>
+    <div className="pt-20 pb-24">
+      <div className="container-prose">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="h-display mb-12 text-center">Políticas.</h1>
+        </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <GlassCard className="p-8 md:p-10">
-                <h2 className="h-card mb-6">Terms of Service</h2>
-                <div className="space-y-4 text-body text-zinc-400">
-                  <p>
-                    By using Vexx-AI, you agree to these terms. The software is provided "as is" without warranty of any kind.
-                  </p>
-                  <p>
-                    Vexx-AI is currently in beta. We reserve the right to modify features, pricing, and availability as we develop the product.
-                  </p>
-                  <p>
-                    You are responsible for ensuring your use of Vexx-AI complies with applicable laws and regulations in your jurisdiction.
-                  </p>
-                </div>
-              </GlassCard>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <GlassCard className="p-8 md:p-10">
-                <h2 className="h-card mb-6">Data Collection</h2>
-                <div className="space-y-4 text-body text-zinc-400">
-                  <p>
-                    Vexx-AI does not collect telemetry or usage data. We do not track how you use the software.
-                  </p>
-                  <p>
-                    Optional crash reports may be sent to help us improve stability, but this can be disabled in settings.
-                  </p>
-                </div>
-              </GlassCard>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <GlassCard className="p-8 md:p-10">
-                <h2 className="h-card mb-6">Contact</h2>
-                <p className="text-body text-zinc-400">
-                  For questions about these policies, please contact us at legal@vexx-ai.com
-                </p>
-              </GlassCard>
-            </motion.div>
-          </div>
+        <div className="space-y-5">
+          {sections.map((s, i) => (
+            <GlassCard key={s.title} delay={i * 0.06} hoverEffect={false}>
+              <h2 className="h-card mb-4">{s.title}</h2>
+              <div className="space-y-3 text-sm text-ink-muted leading-relaxed">
+                {s.paragraphs.map((p, idx) => (
+                  <p key={idx}>{p}</p>
+                ))}
+              </div>
+            </GlassCard>
+          ))}
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface GlassCardProps {
+interface CardProps {
   children: React.ReactNode;
   className?: string;
   hoverEffect?: boolean;
@@ -16,15 +16,14 @@ export default function GlassCard({
   className,
   hoverEffect = true,
   delay = 0,
-}: GlassCardProps) {
+}: CardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={hoverEffect ? { y: -6, scale: 1.01 } : undefined}
-      className={cn("glass-card p-7 md:p-8", className)}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={cn("card p-6 md:p-7", hoverEffect && "card-hover", className)}
     >
       {children}
     </motion.div>

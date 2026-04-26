@@ -2,91 +2,97 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { 
-  MessageSquare, 
-  Bot, 
-  Zap, 
-  Smartphone, 
-  Database, 
-  Eye, 
-  ShieldCheck, 
-  Terminal,
+import {
+  MessageSquare,
+  Bot,
+  Smartphone,
+  Database,
+  Eye,
   Layers,
+  Terminal,
   Search,
   MousePointer2,
-  Lock
+  Lock,
 } from "lucide-react";
 import GlassCard from "@/components/ui/GlassCard";
 
 const mainFeatures = [
   {
-    title: "Command Center",
-    description: "The primary chat interface where you interact with Vexx. Supports rich formatting, code blocks, and streaming responses.",
-    icon: <MessageSquare className="text-accent-cyan" />,
-    details: ["Natural language commands", "Context-aware chat", "Code execution", "Multi-modal support"]
+    title: "Centro de Comando",
+    description: "Interface principal de chat onde você interage com o Vexx. Suporta formatação rica, blocos de código e respostas em streaming.",
+    icon: MessageSquare,
+    details: ["Comandos em linguagem natural", "Chat com contexto", "Execução de código", "Suporte multimodal"],
   },
   {
-    title: "Autonomous Agents",
-    description: "Specialized agents like YUI and JUH that run in the background to complete long-running tasks without supervision.",
-    icon: <Bot className="text-accent-purple" />,
-    details: ["Self-correction", "Task decomposition", "Parallel execution", "Memory retention"]
+    title: "Agentes Autônomos",
+    description: "Agentes especializados que rodam em segundo plano para completar tarefas longas sem supervisão.",
+    icon: Bot,
+    details: ["Auto-correção", "Decomposição de tarefas", "Execução paralela", "Memória persistente"],
   },
   {
-    title: "Remote Control",
-    description: "Control your PC from any mobile device via the Vexx Bridge. Low latency, high frame-rate screen sharing.",
-    icon: <Smartphone className="text-accent-green" />,
-    details: ["Virtual touchpad", "Secure tunnel", "Touch gestures", "Wake-on-LAN"]
+    title: "Controle Remoto",
+    description: "Controle seu PC de qualquer celular via Vexx Bridge. Streaming de tela com baixa latência.",
+    icon: Smartphone,
+    details: ["Touchpad virtual", "Túnel seguro", "Gestos de toque", "Wake-on-LAN"],
   },
   {
-    title: "Screen Awareness",
-    description: "Vexx literally sees what you see. Uses vision models to understand UI elements, text, and icons in real-time.",
-    icon: <Eye className="text-accent-amber" />,
-    details: ["OCR engine", "UI element detection", "Visual reasoning", "Privacy masking"]
+    title: "Visão de Tela",
+    description: "Vexx vê literalmente o que você vê. Usa modelos de visão para entender elementos UI, texto e ícones em tempo real.",
+    icon: Eye,
+    details: ["OCR", "Detecção de UI", "Raciocínio visual", "Mascaramento de privacidade"],
   },
   {
-    title: "Project Kanban",
-    description: "Manage your tasks and AI-generated outputs in a clean, Notion-style board integrated into the dashboard.",
-    icon: <Layers className="text-accent-red" />,
-    details: ["Auto-categorization", "AI task creation", "Asset management", "Timeline view"]
+    title: "Kanban de Projetos",
+    description: "Gerencie suas tarefas e outputs gerados pela IA em um quadro estilo Notion integrado ao dashboard.",
+    icon: Layers,
+    details: ["Auto-categorização", "Criação por IA", "Gestão de assets", "Visão de timeline"],
   },
   {
-    title: "Long-term Memory",
-    description: "Vexx remembers your preferences, past tasks, and specific file locations across sessions.",
-    icon: <Database className="text-white" />,
-    details: ["Vector database", "Local-first storage", "Privacy-focused", "Context retrieval"]
-  }
+    title: "Memória de Longo Prazo",
+    description: "Vexx lembra suas preferências, tarefas passadas e localização de arquivos entre sessões.",
+    icon: Database,
+    details: ["Banco vetorial", "Local-first", "Foco em privacidade", "Recuperação de contexto"],
+  },
+];
+
+const secondary = [
+  { icon: Terminal, title: "CLI integrado", desc: "Execute shell commands com segurança" },
+  { icon: Search, title: "Busca universal", desc: "Encontre qualquer coisa no PC" },
+  { icon: MousePointer2, title: "Controle preciso", desc: "Cliques pixel-perfect" },
+  { icon: Lock, title: "Privacidade local", desc: "Seus dados não saem da máquina" },
 ];
 
 export default function FeaturesPage() {
   return (
-    <div className="pt-32 pb-20">
+    <div className="pt-20 pb-24">
       <div className="container-page">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16 md:mb-24"
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mx-auto text-center mb-14"
         >
-          <h1 className="h-display mb-8">Capabilities.</h1>
-          <p className="lead max-w-3xl mx-auto">
-            More than just a chatbot. Vexx-AI is a full-featured operating system 
-            companion designed for maximum productivity and safety.
+          <h1 className="h-display mb-5">Recursos.</h1>
+          <p className="lead">
+            Mais que um chatbot. O Vexx é um companheiro de sistema operacional
+            projetado para máxima produtividade e segurança.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto">
           {mainFeatures.map((feature, idx) => (
-            <GlassCard key={idx} className="p-8 h-full flex flex-col" delay={idx * 0.1}>
-              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
-                {feature.icon}
+            <GlassCard key={feature.title} className="h-full flex flex-col" delay={idx * 0.05}>
+              <div className="w-10 h-10 rounded-xl bg-accent-soft flex items-center justify-center mb-5">
+                <feature.icon size={18} className="text-accent" />
               </div>
-              <h3 className="text-xl md:text-2xl font-bold mb-4">{feature.title}</h3>
-              <p className="text-body text-zinc-400 leading-relaxed mb-6 flex-grow">
+              <h3 className="h-card mb-2">{feature.title}</h3>
+              <p className="text-sm text-ink-muted leading-relaxed mb-5 flex-grow">
                 {feature.description}
               </p>
-              <div className="space-y-3 pt-6 border-t border-white/5">
-                {feature.details.map((detail, dIdx) => (
-                  <div key={dIdx} className="flex items-center gap-3 text-sm text-zinc-500">
-                    <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+              <div className="space-y-2 pt-4 border-t border-line">
+                {feature.details.map((detail) => (
+                  <div key={detail} className="flex items-center gap-2 text-xs text-ink-subtle">
+                    <div className="w-1 h-1 rounded-full bg-line-strong" />
                     {detail}
                   </div>
                 ))}
@@ -95,73 +101,32 @@ export default function FeaturesPage() {
           ))}
         </div>
 
-        {/* Secondary Features list */}
-        <div className="mt-24 md:mt-32 pt-24 md:pt-32 border-t border-white/5">
-           <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center mb-16"
-           >
-              <h2 className="h-section mb-6">Under the hood.</h2>
-              <p className="lead max-w-2xl mx-auto">
-                Advanced features that power the Vexx experience.
-              </p>
-           </motion.div>
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="mt-24 pt-16 border-t border-line">
+          <div className="text-center mb-12">
+            <h2 className="h-section mb-4">Por trás dos panos.</h2>
+            <p className="text-body max-w-xl mx-auto">
+              Recursos avançados que dão poder ao Vexx.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {secondary.map((item, idx) => (
               <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: 0.1 }}
-                 className="text-center"
+                key={item.title}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.05 }}
+                className="text-center"
               >
-                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <Terminal className="text-zinc-400" size={20} />
-                 </div>
-                 <h4 className="font-bold mb-2">CLI Integration</h4>
-                 <p className="text-sm text-zinc-500">Execute shell commands safely</p>
+                <div className="w-10 h-10 rounded-xl bg-white border border-line flex items-center justify-center mx-auto mb-3">
+                  <item.icon size={16} className="text-ink-muted" />
+                </div>
+                <h4 className="text-sm font-semibold text-ink mb-1">{item.title}</h4>
+                <p className="text-xs text-ink-muted">{item.desc}</p>
               </motion.div>
-              <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: 0.2 }}
-                 className="text-center"
-              >
-                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <Search className="text-zinc-400" size={20} />
-                 </div>
-                 <h4 className="font-bold mb-2">Omni-Search</h4>
-                 <p className="text-sm text-zinc-500">Find anything on your PC instantly</p>
-              </motion.div>
-              <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: 0.3 }}
-                 className="text-center"
-              >
-                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <MousePointer2 className="text-zinc-400" size={20} />
-                 </div>
-                 <h4 className="font-bold mb-2">Precision Control</h4>
-                 <p className="text-sm text-zinc-500">Pixel-perfect click accuracy</p>
-              </motion.div>
-              <motion.div
-                 initial={{ opacity: 0, y: 20 }}
-                 whileInView={{ opacity: 1, y: 0 }}
-                 viewport={{ once: true }}
-                 transition={{ delay: 0.4 }}
-                 className="text-center"
-              >
-                 <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mx-auto mb-4">
-                    <Lock className="text-zinc-400" size={20} />
-                 </div>
-                 <h4 className="font-bold mb-2">Local Privacy</h4>
-                 <p className="text-sm text-zinc-500">Your data never leaves your machine</p>
-              </motion.div>
-           </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,33 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site_ensin (Vexx-AI landing) — Next.js",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "C:\\Users\\efrai\\Documents\\site_ensin",
+      "port": 3000
+    },
+    {
+      "name": "very/frontend (YUI-JUH dashboard) — Next.js",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "C:\\Users\\efrai\\Documents\\very\\frontend",
+      "port": 3000
+    },
+    {
+      "name": "very/vexx-ai — Next.js",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "C:\\Users\\efrai\\Documents\\very\\vexx-ai",
+      "port": 3333
+    },
+    {
+      "name": "very backend (bridge) — FastAPI/uvicorn",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "uvicorn", "bridge:app", "--host", "0.0.0.0", "--port", "8000", "--reload"],
+      "cwd": "C:\\Users\\efrai\\Documents\\very\\backend",
+      "port": 8000
+    }
+  ]
+}

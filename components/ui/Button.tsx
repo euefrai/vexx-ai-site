@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "outline" | "ghost" | "neon";
+type Variant = "primary" | "secondary" | "accent" | "ghost";
 type Size = "sm" | "md" | "lg";
 
-interface ButtonProps extends HTMLMotionProps<"button"> {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
 }
@@ -15,15 +14,14 @@ interface ButtonProps extends HTMLMotionProps<"button"> {
 const variantClass: Record<Variant, string> = {
   primary: "btn-primary",
   secondary: "btn-secondary",
-  outline: "btn-outline",
+  accent: "btn-accent",
   ghost: "btn-ghost",
-  neon: "btn-neon",
 };
 
 const sizeClass: Record<Size, string> = {
-  sm: "px-4 py-2 text-sm",
-  md: "px-5 py-2.5 text-sm md:text-base",
-  lg: "px-7 py-3.5 text-base md:text-lg font-semibold",
+  sm: "btn-sm",
+  md: "btn-md",
+  lg: "btn-lg",
 };
 
 export default function Button({
@@ -34,14 +32,11 @@ export default function Button({
   ...props
 }: ButtonProps) {
   return (
-    <motion.button
-      whileHover={{ scale: 1.02, y: -1 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ type: "spring", stiffness: 400, damping: 25 }}
-      className={cn("btn-base", variantClass[variant], sizeClass[size], className)}
+    <button
+      className={cn("btn", variantClass[variant], sizeClass[size], className)}
       {...props}
     >
       {children}
-    </motion.button>
+    </button>
   );
 }

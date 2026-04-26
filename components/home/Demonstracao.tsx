@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Folder, FileText, CheckCircle2, Sparkles } from "lucide-react";
+import { Folder, FileText, Check, Play } from "lucide-react";
 
 const steps = [
-  { id: 1, text: "Analisando arquivos desorganizados...", progress: 20 },
-  { id: 2, text: "Categorizando por tipo e data...", progress: 45 },
-  { id: 3, text: "Criando estrutura de pastas...", progress: 70 },
-  { id: 4, text: "Movendo arquivos...", progress: 90 },
-  { id: 5, text: "Organização concluída!", progress: 100 },
+  { id: 1, text: "Analisando arquivos…" },
+  { id: 2, text: "Categorizando por tipo e data…" },
+  { id: 3, text: "Criando estrutura de pastas…" },
+  { id: 4, text: "Movendo arquivos…" },
+  { id: 5, text: "Concluído." },
 ];
 
 export default function Demonstracao() {
@@ -18,7 +18,6 @@ export default function Demonstracao() {
 
   useEffect(() => {
     if (!isPlaying) return;
-
     const interval = setInterval(() => {
       setCurrentStep((prev) => {
         if (prev >= steps.length - 1) {
@@ -27,8 +26,7 @@ export default function Demonstracao() {
         }
         return prev + 1;
       });
-    }, 1500);
-
+    }, 1100);
     return () => clearInterval(interval);
   }, [isPlaying]);
 
@@ -38,167 +36,138 @@ export default function Demonstracao() {
   };
 
   return (
-    <section className="section-pad relative overflow-hidden">
+    <section className="section border-t border-line bg-[#FCFBF8]">
       <div className="container-page">
-        {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="max-w-2xl mx-auto text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            <span className="text-white">Veja em ação.</span>
-          </h2>
-          <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto">
+          <h2 className="h-section mb-4">Veja em ação.</h2>
+          <p className="text-body">
             Um exemplo real: organizando a área de trabalho em segundos.
           </p>
         </motion.div>
 
-        {/* Demo container */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="max-w-4xl mx-auto"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="max-w-3xl mx-auto"
         >
-          <div className="glass-card glow-pulse p-2">
-            <div className="bg-black/60 rounded-xl overflow-hidden">
-              {/* Demo header */}
-              <div className="px-6 py-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="w-5 h-5 text-accent-cyan" />
-                  <span className="font-medium text-white">"Organize minha área de trabalho"</span>
+          <div className="card overflow-hidden shadow-card">
+            <div className="px-5 py-3 border-b border-line bg-white flex items-center justify-between">
+              <span className="text-sm font-medium text-ink">
+                "Organize minha área de trabalho"
+              </span>
+              <button
+                onClick={handlePlay}
+                disabled={isPlaying}
+                className="btn btn-secondary btn-sm disabled:opacity-50"
+              >
+                <Play size={12} />
+                {isPlaying ? "Executando…" : "Reproduzir"}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 md:p-8 min-h-[280px]">
+              {/* Files */}
+              <div className="relative">
+                <h4 className="eyebrow mb-4">Área de Trabalho</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        opacity: currentStep >= 4 ? 0.35 : 1,
+                        scale: currentStep >= 4 ? 0.95 : 1,
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-background border border-line"
+                    >
+                      <FileText size={20} className="text-ink-muted" />
+                      <span className="text-[10px] text-ink-subtle">file_{i}</span>
+                    </motion.div>
+                  ))}
                 </div>
-                <button
-                  onClick={handlePlay}
-                  disabled={isPlaying}
-                  className="px-4 py-2 rounded-full bg-accent-cyan/20 text-accent-cyan text-sm font-medium hover:bg-accent-cyan/30 transition-colors disabled:opacity-50"
-                >
-                  {isPlaying ? "Executando..." : "▶ Reproduzir"}
-                </button>
+
+                <AnimatePresence>
+                  {currentStep >= 3 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 grid grid-cols-2 gap-2"
+                    >
+                      {["PDFs", "Imagens"].map((folder) => (
+                        <div
+                          key={folder}
+                          className="flex flex-col items-center gap-1.5 p-3 rounded-lg bg-accent-soft border border-accent/20"
+                        >
+                          <Folder size={20} className="text-accent" />
+                          <span className="text-[10px] text-accent font-medium">
+                            {folder}
+                          </span>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* Demo content */}
-              <div className="p-8 min-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Left: File visualization */}
-                <div className="relative">
-                  <h4 className="text-sm font-medium text-zinc-500 mb-4">Área de Trabalho</h4>
-                  <div className="grid grid-cols-3 gap-3">
-                    <AnimatePresence>
-                      {[1, 2, 3, 4, 5, 6].map((i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 1, scale: 1 }}
-                          animate={{
-                            opacity: currentStep >= 4 ? 0.3 : 1,
-                            scale: currentStep >= 4 ? 0.9 : 1,
-                            x: currentStep >= 4 ? 20 : 0,
-                          }}
-                          className="flex flex-col items-center gap-2 p-3 rounded-lg bg-white/5"
-                        >
-                          <FileText className="w-8 h-8 text-zinc-400" />
-                          <span className="text-xs text-zinc-500">Arquivo_{i}.pdf</span>
-                        </motion.div>
-                      ))}
-                    </AnimatePresence>
-                  </div>
-
-                  {/* New folders appearing */}
-                  <AnimatePresence>
-                    {currentStep >= 3 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="absolute bottom-0 left-0 right-0 grid grid-cols-2 gap-3"
+              {/* Steps */}
+              <div>
+                <h4 className="eyebrow mb-4">Progresso</h4>
+                <div className="space-y-3">
+                  {steps.map((step, i) => (
+                    <motion.div
+                      key={step.id}
+                      animate={{ opacity: i <= currentStep ? 1 : 0.4 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div
+                        className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                          i < currentStep
+                            ? "bg-ink text-white"
+                            : i === currentStep
+                            ? "bg-accent text-white"
+                            : "bg-line text-ink-subtle"
+                        }`}
                       >
-                        {["PDFs", "Imagens"].map((folder, i) => (
-                          <motion.div
-                            key={folder}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: i * 0.2 }}
-                            className="flex flex-col items-center gap-2 p-3 rounded-lg bg-accent-cyan/10 border border-accent-cyan/20"
-                          >
-                            <Folder className="w-8 h-8 text-accent-cyan" />
-                            <span className="text-xs text-accent-cyan">{folder}</span>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        {i < currentStep ? (
+                          <Check size={11} strokeWidth={3} />
+                        ) : (
+                          <span className="text-[10px] font-semibold">
+                            {step.id}
+                          </span>
+                        )}
+                      </div>
+                      <span
+                        className={`text-sm ${
+                          i <= currentStep ? "text-ink" : "text-ink-subtle"
+                        }`}
+                      >
+                        {step.text}
+                      </span>
+                    </motion.div>
+                  ))}
                 </div>
 
-                {/* Right: Progress steps */}
-                <div>
-                  <h4 className="text-sm font-medium text-zinc-500 mb-4">Progresso</h4>
-                  <div className="space-y-4">
-                    {steps.map((step, index) => (
-                      <motion.div
-                        key={step.id}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{
-                          opacity: index <= currentStep ? 1 : 0.3,
-                          x: 0,
-                        }}
-                        className="flex items-center gap-3"
-                      >
-                        <div
-                          className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                            index < currentStep
-                              ? "bg-accent-green text-black"
-                              : index === currentStep
-                              ? "bg-accent-cyan text-black"
-                              : "bg-white/10 text-zinc-500"
-                          }`}
-                        >
-                          {index < currentStep ? (
-                            <CheckCircle2 className="w-4 h-4" />
-                          ) : (
-                            <span className="text-xs">{step.id}</span>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <p
-                            className={`text-sm ${
-                              index <= currentStep ? "text-white" : "text-zinc-600"
-                            }`}
-                          >
-                            {step.text}
-                          </p>
-                          {index === currentStep && isPlaying && (
-                            <div className="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
-                              <motion.div
-                                className="h-full bg-gradient-to-r from-accent-cyan to-accent-green"
-                                initial={{ width: 0 }}
-                                animate={{ width: `${step.progress}%` }}
-                                transition={{ duration: 1.5, ease: "easeOut" }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-
-                  {/* Success message */}
-                  <AnimatePresence>
-                    {currentStep >= 4 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 p-4 rounded-xl bg-accent-green/10 border border-accent-green/20"
-                      >
-                        <p className="text-sm text-accent-green flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4" />
-                          12 arquivos organizados em 2 pastas
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                <AnimatePresence>
+                  {currentStep >= 4 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-5 p-3 rounded-lg bg-accent-soft border border-accent/20 text-sm text-accent flex items-center gap-2"
+                    >
+                      <Check size={14} />
+                      12 arquivos organizados em 2 pastas
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>

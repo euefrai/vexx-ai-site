@@ -1,194 +1,120 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-import { Download, Play, Sparkles, Zap, Shield, Cpu } from "lucide-react";
+import { ArrowRight, Download } from "lucide-react";
 import Link from "next/link";
 
-const terminalLines = [
-  { text: "> Analisando tela...", delay: 0.5, color: "text-accent-cyan" },
-  { text: "> Identificando elementos UI...", delay: 1.2, color: "text-accent-purple" },
-  { text: "> Criando plano de ação...", delay: 2.0, color: "text-accent-green" },
-  { text: "> Executando: organizar_arquivos()", delay: 2.8, color: "text-accent-cyan" },
-  { text: "> ✓ Tarefa concluída", delay: 3.5, color: "text-accent-green" },
-];
-
-const features = [
-  { icon: Shield, text: "100% local" },
-  { icon: Cpu, text: "Controle total" },
-  { icon: Zap, text: "Funciona com sua API" },
-];
-
 export default function HeroNovo() {
-  const [visibleLines, setVisibleLines] = useState<number[]>([]);
-  const [showCursor, setShowCursor] = useState(true);
-
-  useEffect(() => {
-    terminalLines.forEach((line, index) => {
-      setTimeout(() => {
-        setVisibleLines((prev) => [...prev, index]);
-      }, line.delay * 1000);
-    });
-
-    const cursorInterval = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-
-    return () => clearInterval(cursorInterval);
-  }, []);
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] orb orb-cyan float-slow" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] orb orb-purple float-medium" />
-        <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] orb orb-green float-y" />
-      </div>
+    <section className="pt-24 md:pt-32 pb-20 md:pb-28">
+      <div className="container-page">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-3xl mx-auto text-center"
+        >
+          <span className="pill mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+            Beta aberto · v1.0
+          </span>
 
-      {/* Scanline effect */}
-      <div className="absolute inset-0 scanline pointer-events-none" />
+          <h1 className="h-display mb-6">
+            A IA que entende
+            <br />
+            seu computador.
+          </h1>
 
-      <div className="container-page relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Left content */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center lg:text-left"
-          >
-            {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8"
-            >
-              <Sparkles className="w-4 h-4 text-accent-cyan" />
-              <span className="text-sm font-medium text-zinc-300">IA que controla seu computador</span>
-            </motion.div>
+          <p className="lead max-w-xl mx-auto mb-10">
+            Vexx vê sua tela, planeja a ação e executa tarefas reais —
+            tudo localmente, com sua própria chave de API.
+          </p>
 
-            {/* Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6">
-              <span className="text-white">Seu computador</span>
-              <br />
-              <span className="gradient-text">pensa, age e executa</span>
-              <br />
-              <span className="text-white">por você.</span>
-            </h1>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/downloads/Vexx-AI-Setup.exe" download>
+              <button className="btn btn-primary btn-lg w-full sm:w-auto">
+                <Download size={16} />
+                Baixar para Windows
+              </button>
+            </a>
+            <Link href="/demo">
+              <button className="btn btn-secondary btn-lg w-full sm:w-auto">
+                Ver demonstração
+                <ArrowRight size={16} />
+              </button>
+            </Link>
+          </div>
 
-            {/* Subtitle */}
-            <p className="text-lg md:text-xl text-zinc-400 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-              O Vexx é uma IA que controla seu computador em tempo real. 
-              Ele vê sua tela, entende o contexto e executa tarefas automaticamente.
-            </p>
+          <p className="mt-5 text-xs text-ink-subtle">
+            Grátis para baixar · Sem cartão de crédito · macOS e Linux em breve
+          </p>
+        </motion.div>
 
-            {/* Feature pills */}
-            <div className="flex flex-wrap gap-3 justify-center lg:justify-start mb-10">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.text}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
-                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10"
-                >
-                  <feature.icon className="w-4 h-4 text-accent-cyan" />
-                  <span className="text-sm text-zinc-300">{feature.text}</span>
-                </motion.div>
-              ))}
+        {/* Product preview */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-16 md:mt-20 max-w-4xl mx-auto"
+        >
+          <div className="card overflow-hidden shadow-elevated">
+            {/* window chrome */}
+            <div className="flex items-center gap-2 px-4 py-3 border-b border-line bg-[#FCFBF8]">
+              <div className="flex gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-line-strong" />
+                <div className="w-2.5 h-2.5 rounded-full bg-line-strong" />
+                <div className="w-2.5 h-2.5 rounded-full bg-line-strong" />
+              </div>
+              <div className="flex-1 text-center">
+                <span className="text-xs text-ink-subtle font-mono">vexx</span>
+              </div>
+              <div className="w-8" />
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <a href="/downloads/Vexx-AI-Setup.exe" download>
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-base btn-primary px-8 py-4 text-base font-semibold"
-                >
-                  <Download className="w-5 h-5" />
-                  Baixar para Windows
-                </motion.button>
-              </a>
-              <Link href="/demo">
-                <motion.button
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="btn-base btn-secondary px-8 py-4 text-base font-semibold"
-                >
-                  <Play className="w-5 h-5" />
-                  Ver demonstração
-                </motion.button>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Right content - Terminal */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            {/* Terminal window */}
-            <div className="relative glass-card p-1 glow-pulse">
-              <div className="bg-black/80 rounded-xl overflow-hidden">
-                {/* Terminal header */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-white/5 border-b border-white/10">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            <div className="p-6 md:p-8">
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full bg-accent-soft text-accent flex items-center justify-center text-xs font-semibold mt-0.5">
+                    Eu
                   </div>
-                  <div className="flex-1 text-center">
-                    <span className="text-xs text-zinc-500 font-mono">vexx-agent — bash</span>
+                  <div className="flex-1 pt-1">
+                    <p className="text-sm text-ink">Organize os arquivos da minha área de trabalho por tipo.</p>
                   </div>
                 </div>
 
-                {/* Terminal content */}
-                <div className="p-6 font-mono text-sm min-h-[280px]">
-                  <div className="text-zinc-500 mb-4">
-                    <span className="text-accent-green">➜</span> <span className="text-accent-cyan">~</span> vexx start
+                <div className="flex items-start gap-3">
+                  <div className="w-7 h-7 rounded-full bg-ink text-white flex items-center justify-center text-xs font-semibold mt-0.5">
+                    V
                   </div>
-
-                  {terminalLines.map((line, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={visibleLines.includes(index) ? { opacity: 1, x: 0 } : {}}
-                      transition={{ duration: 0.3 }}
-                      className={`${line.color} mb-2`}
-                    >
-                      {line.text}
-                    </motion.div>
-                  ))}
-
-                  {/* Cursor */}
-                  <div className="flex items-center mt-4">
-                    <span className="text-accent-green mr-2">➜</span>
-                    <span className="text-accent-cyan mr-2">~</span>
-                    <span className="text-zinc-400">_</span>
-                    <span
-                      className={`w-2 h-5 bg-accent-cyan ml-0.5 ${
-                        showCursor ? "opacity-100" : "opacity-0"
-                      }`}
-                    />
+                  <div className="flex-1 space-y-2 pt-1">
+                    <p className="text-sm text-ink-muted">Analisando sua área de trabalho…</p>
+                    <p className="text-sm text-ink-muted">Identifiquei 24 arquivos em 4 categorias.</p>
+                    <p className="text-sm text-ink">Pronto. Criei <span className="font-medium text-ink">Documentos</span>, <span className="font-medium text-ink">Imagens</span>, <span className="font-medium text-ink">Vídeos</span> e <span className="font-medium text-ink">Outros</span> — e movi tudo para os lugares certos.</p>
                   </div>
                 </div>
               </div>
+
+              <div className="mt-6 pt-6 border-t border-line">
+                <div className="flex items-center gap-3 input cursor-text">
+                  <span className="text-ink-subtle text-sm">Pergunte ou peça uma tarefa…</span>
+                </div>
+              </div>
             </div>
+          </div>
 
-            {/* Decorative elements */}
-            <div className="absolute -top-4 -right-4 w-24 h-24 bg-accent-cyan/20 rounded-full blur-2xl" />
-            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent-purple/20 rounded-full blur-2xl" />
-          </motion.div>
-        </div>
+          {/* Trust row */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-ink-subtle">
+            <span>100% local</span>
+            <span className="w-1 h-1 rounded-full bg-line-strong" />
+            <span>Sem telemetria</span>
+            <span className="w-1 h-1 rounded-full bg-line-strong" />
+            <span>Suas próprias APIs</span>
+            <span className="w-1 h-1 rounded-full bg-line-strong" />
+            <span>Código auditável</span>
+          </div>
+        </motion.div>
       </div>
-
-      {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#07070a] to-transparent pointer-events-none" />
     </section>
   );
 }

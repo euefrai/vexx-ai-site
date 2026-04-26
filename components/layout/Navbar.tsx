@@ -3,9 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Cpu, Download, ArrowRight } from "lucide-react";
-import Button from "@/components/ui/Button";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { name: "Como funciona", href: "/how-it-works" },
@@ -21,10 +19,10 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
@@ -32,35 +30,35 @@ export default function Navbar() {
   }, [pathname]);
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 transition-all duration-300">
-      <div className="container-page pt-4">
-        <div
-          className={`flex items-center justify-between gap-6 px-4 md:px-5 py-2.5 rounded-full transition-all duration-300 ${
-            scrolled
-              ? "bg-black/55 backdrop-blur-2xl border border-white/10 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.6)]"
-              : "bg-black/20 backdrop-blur-md border border-white/5"
-          }`}
-        >
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-cyan via-white to-accent-purple flex items-center justify-center shadow-[0_0_24px_-4px_rgba(0,245,255,0.6)] group-hover:rotate-6 transition-transform duration-300">
-              <Cpu className="text-black w-5 h-5" />
+    <nav
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-200 ${
+        scrolled
+          ? "bg-background/85 backdrop-blur-md border-b border-line"
+          : "bg-background/60 backdrop-blur-sm border-b border-transparent"
+      }`}
+    >
+      <div className="container-page">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-7 h-7 rounded-lg bg-ink flex items-center justify-center">
+              <span className="text-white text-sm font-semibold">V</span>
             </div>
-            <span className="text-lg font-semibold tracking-tight text-white">
-              Vexx<span className="text-accent-cyan">·</span>AI
+            <span className="text-base font-semibold tracking-tight text-ink">
+              Vexx
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-1 mx-auto">
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
               const active = pathname === link.href;
               return (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     active
-                      ? "text-white bg-white/[0.06]"
-                      : "text-zinc-400 hover:text-white hover:bg-white/[0.04]"
+                      ? "text-ink"
+                      : "text-ink-muted hover:text-ink"
                   }`}
                 >
                   {link.name}
@@ -69,56 +67,46 @@ export default function Navbar() {
             })}
           </div>
 
-          <div className="hidden lg:flex items-center gap-3 shrink-0">
-            <Link href="/download">
-              <Button variant="neon" size="sm" className="glow-pulse">
-                <Download className="w-4 h-4" />
-                Baixar agora
-              </Button>
+          <div className="hidden lg:flex items-center gap-3">
+            <Link
+              href="/download"
+              className="btn btn-primary btn-sm"
+            >
+              Baixar
             </Link>
           </div>
 
           <button
-            className="lg:hidden text-white p-2 -mr-2"
+            className="lg:hidden text-ink p-2 -mr-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X /> : <Menu />}
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden mx-6 mt-3 rounded-3xl bg-black/85 backdrop-blur-2xl border border-white/10 p-6"
-          >
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className="px-4 py-3 rounded-xl text-base font-medium text-zinc-300 hover:text-white hover:bg-white/5"
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <div className="flex flex-col gap-3 pt-4 mt-2 border-t border-white/10">
-                <Link href="/download">
-                  <Button variant="neon" className="w-full glow-pulse">
-                    <Download className="w-4 h-4" />
-                    Baixar agora
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isOpen && (
+        <div className="lg:hidden border-t border-line bg-background">
+          <div className="container-page py-4 flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="px-3 py-2.5 rounded-lg text-base font-medium text-ink-muted hover:text-ink hover:bg-black/[0.03]"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <Link
+              href="/download"
+              className="btn btn-primary btn-md mt-3 w-full"
+            >
+              Baixar
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

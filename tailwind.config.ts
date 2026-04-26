@@ -9,42 +9,37 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "#FAFAF8",
+        surface: "#FFFFFF",
+        ink: {
+          DEFAULT: "#141413",
+          muted: "#6B6B68",
+          subtle: "#9C9B98",
+        },
+        line: {
+          DEFAULT: "#E8E6E1",
+          strong: "#D6D3CC",
+        },
         accent: {
-          cyan: "#00f5ff",
-          purple: "#9d4edd",
-          green: "#00ff9f",
-          amber: "#ffb700",
-          red: "#ff003c",
-        },
-        card: {
-          DEFAULT: "rgba(255, 255, 255, 0.03)",
-          hover: "rgba(255, 255, 255, 0.05)",
+          DEFAULT: "#6B5BD6",
+          soft: "#F2F0FC",
+          hover: "#5A4BC4",
         },
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "glow-mesh": "radial-gradient(circle at 50% 50%, rgba(0, 245, 255, 0.15) 0%, transparent 50%)",
+      fontFamily: {
+        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        serif: ["ui-serif", "Georgia", "Cambria", "serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
-      animation: {
-        "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 6s ease-in-out infinite",
-        "shimmer": "shimmer 2s linear infinite",
+      borderRadius: {
+        xl: "12px",
+        "2xl": "16px",
+        "3xl": "20px",
       },
-      keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        shimmer: {
-          from: { backgroundPosition: "0 0" },
-          to: { backgroundPosition: "-200% 0" },
-        },
-      },
-      backdropBlur: {
-        xs: "2px",
+      boxShadow: {
+        soft: "0 1px 2px rgba(20, 20, 19, 0.04), 0 1px 1px rgba(20, 20, 19, 0.03)",
+        card: "0 1px 3px rgba(20, 20, 19, 0.05), 0 1px 2px rgba(20, 20, 19, 0.03)",
+        elevated: "0 4px 14px rgba(20, 20, 19, 0.06), 0 2px 6px rgba(20, 20, 19, 0.04)",
       },
     },
   },
