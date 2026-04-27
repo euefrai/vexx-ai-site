@@ -31,7 +31,7 @@ const sections = [
   {
     title: "Contato",
     paragraphs: [
-      "Para dúvidas sobre estas políticas, entre em contato em legal@vexx-ai.com",
+      "Para dúvidas sobre estas políticas, entre em contato em darkcontent934@gmail.com",
     ],
   },
 ];
