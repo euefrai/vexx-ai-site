@@ -6,7 +6,7 @@ import { Download, Check, Monitor, Apple, Layout, KeyRound, Shield, Rocket, Term
 import Button from "@/components/ui/Button";
 import GlassCard from "@/components/ui/GlassCard";
 
-const INSTALLER_HREF = "/downloads/Vexx-AI-Setup.exe";
+const INSTALLER_HREF = "https://github.com/euefrai/vexx-ai-releases/releases/download/v1.0.0/Vexx-AI-Setup-v1.0.0.exe";
 const INSTALLER_VERSION = "v1.0.0 Beta";
 
 const platforms = [

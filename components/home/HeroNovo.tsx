@@ -32,7 +32,7 @@ export default function HeroNovo() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/downloads/Vexx-AI-Setup.exe" download>
+            <a href="https://github.com/euefrai/vexx-ai-releases/releases/download/v1.0.0/Vexx-AI-Setup-v1.0.0.exe">
               <button className="btn btn-primary btn-lg w-full sm:w-auto">
                 <Download size={16} />
                 Baixar para Windows
