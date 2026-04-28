@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe";
-import { priceIdFor, type Plan } from "@/lib/plans";
+import { getPriceId, type PlanTier, type BillingPeriod } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
@@ -16,14 +16,17 @@ export async function POST(request: NextRequest) {
   }
 
   const body = (await request.json().catch(() => ({}))) as {
-    plan?: Plan;
+    plan?: PlanTier;
+    billing?: BillingPeriod;
   };
   const plan = body.plan;
+  const billing = body.billing ?? "monthly";
+
   if (plan !== "pro" && plan !== "premium") {
     return NextResponse.json({ error: "invalid_plan" }, { status: 400 });
   }
 
-  const priceId = priceIdFor(plan);
+  const priceId = getPriceId(plan, billing);
   if (!priceId) {
     return NextResponse.json(
       { error: "price_not_configured" },
@@ -65,9 +68,9 @@ export async function POST(request: NextRequest) {
     allow_promotion_codes: true,
     client_reference_id: user.id,
     subscription_data: {
-      metadata: { supabase_user_id: user.id, plan },
+      metadata: { supabase_user_id: user.id, plan, billing },
     },
-    metadata: { supabase_user_id: user.id, plan },
+    metadata: { supabase_user_id: user.id, plan, billing },
   });
 
   return NextResponse.json({ url: session.url });

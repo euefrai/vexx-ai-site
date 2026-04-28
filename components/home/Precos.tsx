@@ -63,9 +63,8 @@ export default function Precos() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className={`card p-7 md:p-8 relative ${
-                plan.highlight ? "border-ink shadow-elevated" : ""
-              }`}
+              className={`card p-7 md:p-8 relative ${plan.highlight ? "border-ink shadow-elevated" : ""
+                }`}
             >
               {plan.highlight && (
                 <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
@@ -105,9 +104,8 @@ export default function Precos() {
 
               <Link href="/download" className="block">
                 <button
-                  className={`btn ${
-                    plan.highlight ? "btn-primary" : "btn-secondary"
-                  } btn-md w-full`}
+                  className={`btn ${plan.highlight ? "btn-primary" : "btn-secondary"
+                    } btn-md w-full`}
                 >
                   {plan.cta}
                 </button>

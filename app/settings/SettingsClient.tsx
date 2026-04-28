@@ -13,7 +13,7 @@ import {
   Star,
   Crown,
 } from "lucide-react";
-import type { Plan } from "@/lib/plans";
+import { PRICING_PLANS, type PlanTier, type BillingPeriod } from "@/lib/pricing";
 
 type Subscription = {
   status: string;
@@ -24,70 +24,35 @@ type Subscription = {
 interface Props {
   email: string;
   name: string | null;
-  plan: Plan;
+  plan: PlanTier;
   hasCustomer: boolean;
   subscription: Subscription;
 }
 
 /* ------------------------------------------------------------------ */
-/*  Plan metadata                                                       */
+/*  Plan metadata styles                                                */
 /* ------------------------------------------------------------------ */
 const PLAN_META: Record<
-  Plan,
-  { label: string; icon: React.ReactNode; color: string; bg: string; description: string }
+  PlanTier,
+  { icon: React.ReactNode; color: string; bg: string }
 > = {
   free: {
-    label: "Grátis",
     icon: <Zap size={18} />,
     color: "text-ink-muted",
     bg: "bg-[#F4F3F0]",
-    description: "Acesso básico ao Vexx com funcionalidades essenciais.",
   },
   pro: {
-    label: "Pro",
     icon: <Star size={18} />,
     color: "text-amber-600",
     bg: "bg-amber-50",
-    description: "Automação avançada, prioridade no suporte e mais uso.",
   },
   premium: {
-    label: "Premium",
     icon: <Crown size={18} />,
     color: "text-accent",
     bg: "bg-accent-soft",
-    description: "Acesso total a todos os recursos, sem limites.",
   },
 };
 
-const ALL_PLANS: { key: Plan; features: string[] }[] = [
-  {
-    key: "free",
-    features: ["Automação básica", "1 dispositivo", "Suporte por email"],
-  },
-  {
-    key: "pro",
-    features: [
-      "Automação avançada",
-      "Até 3 dispositivos",
-      "Suporte prioritário",
-      "Análise de uso",
-    ],
-  },
-  {
-    key: "premium",
-    features: [
-      "Automação ilimitada",
-      "Dispositivos ilimitados",
-      "Suporte dedicado 24/7",
-      "API de integração",
-      "Relatórios avançados",
-    ],
-  },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Component                                                           */
-/* ------------------------------------------------------------------ */
 export default function SettingsClient({
   email,
   name,
@@ -103,14 +68,15 @@ export default function SettingsClient({
   const [busy, setBusy] = useState<"checkout" | "portal" | "logout" | null>(
     null
   );
+  const [isYearly, setIsYearly] = useState(false);
 
   /* ---------- Actions ---------- */
-  const upgrade = async (target: "pro" | "premium") => {
+  const upgrade = async (target: PlanTier) => {
     setBusy("checkout");
     const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: target }),
+      body: JSON.stringify({ plan: target, billing: isYearly ? "yearly" : "monthly" }),
     });
     const data = await res.json();
     if (data.url) {
@@ -140,6 +106,7 @@ export default function SettingsClient({
     router.refresh();
   };
 
+  const currentPlanData = PRICING_PLANS.find((p) => p.id === plan)!;
   const meta = PLAN_META[plan];
 
   /* ---------- Render ---------- */
@@ -199,7 +166,7 @@ export default function SettingsClient({
                       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold ${meta.bg} ${meta.color}`}
                     >
                       {meta.icon}
-                      {meta.label}
+                      {currentPlanData.name}
                     </span>
                     {plan !== "free" && (
                       <span className="text-xs text-ink-subtle">ativo</span>
@@ -259,7 +226,7 @@ export default function SettingsClient({
 
         {/* ---- TAB: PLAN ---- */}
         {tab === "plan" && (
-          <div className="space-y-4 fade-up">
+          <div className="space-y-6 fade-up">
             {/* Current plan highlight */}
             <div
               className={`card p-6 md:p-8 border-2 ${
@@ -278,7 +245,7 @@ export default function SettingsClient({
                       {meta.icon}
                     </span>
                     <h2 className="text-2xl font-bold tracking-tight text-ink">
-                      {meta.label}
+                      {currentPlanData.name}
                     </h2>
                     {plan !== "free" && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-soft text-accent text-xs font-semibold">
@@ -287,7 +254,7 @@ export default function SettingsClient({
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-ink-muted">{meta.description}</p>
+                  <p className="text-sm text-ink-muted">{currentPlanData.description}</p>
                   {subscription?.current_period_end && (
                     <p className="text-xs text-ink-subtle mt-2">
                       {subscription.cancel_at_period_end
@@ -319,18 +286,46 @@ export default function SettingsClient({
               </div>
             </div>
 
+            <div className="flex items-center justify-center gap-3 my-6">
+              <span
+                className={`text-sm ${
+                  !isYearly ? "text-ink font-medium" : "text-ink-subtle"
+                }`}
+              >
+                Mensal
+              </span>
+              <button
+                onClick={() => setIsYearly(!isYearly)}
+                className="w-11 h-6 rounded-full bg-line p-0.5 flex items-center transition-colors hover:bg-line-strong"
+                aria-label="Alternar período de cobrança"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-ink transition-transform ${
+                    isYearly ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+              <span
+                className={`text-sm ${
+                  isYearly ? "text-ink font-medium" : "text-ink-subtle"
+                }`}
+              >
+                Anual <span className="text-accent">−20%</span>
+              </span>
+            </div>
+
             {/* Plan comparison cards */}
             <div className="grid md:grid-cols-3 gap-4">
-              {ALL_PLANS.map(({ key, features }) => {
-                const m = PLAN_META[key];
-                const isCurrent = key === plan;
+              {PRICING_PLANS.map((p) => {
+                const m = PLAN_META[p.id];
+                const isCurrent = p.id === plan;
                 const isDowngrade =
-                  key === "free" ||
-                  (plan === "premium" && key === "pro");
+                  p.id === "free" ||
+                  (plan === "premium" && p.id === "pro");
 
                 return (
                   <div
-                    key={key}
+                    key={p.id}
                     className={`card p-6 flex flex-col gap-4 transition-all duration-200 ${
                       isCurrent
                         ? "border-accent/40 shadow-md"
@@ -343,18 +338,26 @@ export default function SettingsClient({
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold mb-3 ${m.bg} ${m.color}`}
                       >
                         {m.icon}
-                        {m.label}
+                        {p.name}
                       </span>
                       {isCurrent && (
                         <span className="ml-2 text-xs font-medium text-accent">
                           ✓ atual
                         </span>
                       )}
+                      <div className="mt-2 flex items-baseline gap-1.5">
+                        <span className="text-2xl font-semibold text-ink">
+                          {isYearly ? p.prices.yearly.amount : p.prices.monthly.amount}
+                        </span>
+                        <span className="text-xs text-ink-subtle">
+                          {p.id === "free" ? "" : "/ mês"}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Features */}
-                    <ul className="space-y-2.5 flex-1">
-                      {features.map((f) => (
+                    <ul className="space-y-2.5 flex-1 mt-2">
+                      {p.features.map((f) => (
                         <li key={f} className="flex items-center gap-2 text-sm text-ink-muted">
                           <Check
                             size={13}
@@ -375,14 +378,12 @@ export default function SettingsClient({
                         <span className="text-xs text-ink-subtle">—</span>
                       ) : (
                         <Button
-                          variant={key === "premium" ? "accent" : "secondary"}
+                          variant={p.id === "premium" ? "accent" : "secondary"}
                           size="sm"
                           className="w-full"
-                          onClick={() =>
-                            upgrade(key as "pro" | "premium")
-                          }
+                          onClick={() => upgrade(p.id)}
                           disabled={busy === "checkout"}
-                          id={`btn-upgrade-${key}`}
+                          id={`btn-upgrade-${p.id}`}
                         >
                           Fazer upgrade
                         </Button>

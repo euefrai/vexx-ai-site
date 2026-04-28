@@ -2,22 +2,34 @@ import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/server";
-import type { Plan } from "@/lib/plans";
+import {
+  PAID_PLANS,
+  PLANS,
+  type PlanId,
+} from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 // Stripe needs the raw body to verify the signature.
 export const runtime = "nodejs";
 
-const PRICE_TO_PLAN: () => Record<string, Plan> = () => ({
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? "__pro__"]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PREMIUM ?? "__premium__"]: "premium",
-});
+// Lazy because env vars must resolve at request time, not module load time.
+function priceToPlanMap(): Record<string, PlanId> {
+  const map: Record<string, PlanId> = {};
+  for (const plan of PAID_PLANS) {
+    const def = PLANS[plan];
+    const monthly = process.env[def.stripeMonthlyPriceEnv!];
+    const yearly = process.env[def.stripeYearlyPriceEnv!];
+    if (monthly) map[monthly] = plan;
+    if (yearly) map[yearly] = plan;
+  }
+  return map;
+}
 
-function planFromSubscription(sub: Stripe.Subscription): Plan {
-  const map = PRICE_TO_PLAN();
+function planFromSubscription(sub: Stripe.Subscription): PlanId {
+  const map = priceToPlanMap();
   for (const item of sub.items.data) {
-    const p = map[item.price.id];
-    if (p) return p;
+    const matched = map[item.price.id];
+    if (matched) return matched;
   }
   return "free";
 }
@@ -29,26 +41,47 @@ async function syncSubscription(stripe: Stripe, subscriptionId: string) {
   const customerId =
     typeof sub.customer === "string" ? sub.customer : sub.customer.id;
 
-  // Find user by stripe_customer_id (set when checkout was created)
-  const { data: profile } = await supabase
+  // Lookup #1 — by stripe_customer_id (set when checkout created the
+  // customer).
+  let { data: profile } = await supabase
     .from("users")
     .select("id")
     .eq("stripe_customer_id", customerId)
     .single();
+
+  // Lookup #2 — fallback via subscription metadata. Avoids the race where
+  // `customer.subscription.created` arrives before the checkout endpoint
+  // has had time to persist `stripe_customer_id` on the user row.
+  if (!profile) {
+    const supabaseUserId = sub.metadata?.supabase_user_id;
+    if (supabaseUserId) {
+      const { data: byMeta } = await supabase
+        .from("users")
+        .select("id")
+        .eq("id", supabaseUserId)
+        .single();
+      if (byMeta) {
+        profile = byMeta;
+        // Backfill so the customer-id lookup wins next time.
+        await supabase
+          .from("users")
+          .update({ stripe_customer_id: customerId })
+          .eq("id", byMeta.id);
+      }
+    }
+  }
 
   if (!profile) {
     console.warn(`[stripe webhook] no user for customer ${customerId}`);
     return;
   }
 
-  const planTier =
+  const planTier: PlanId =
     sub.status === "active" || sub.status === "trialing"
       ? planFromSubscription(sub)
       : "free";
 
-  // Stripe API ≥ 2025-03 moved `current_period_end` onto subscription items.
-  // Read from the first item, which holds the billing period for our
-  // single-price subscriptions.
+  // Stripe API ≥ 2024-11-20 puts the billing period on subscription items.
   const item = sub.items.data[0];
   const periodEndUnix = item?.current_period_end ?? null;
 
@@ -67,7 +100,6 @@ async function syncSubscription(stripe: Stripe, subscriptionId: string) {
     { onConflict: "stripe_subscription_id" }
   );
 
-  // Reflect plan on the user row
   await supabase
     .from("users")
     .update({ plan: planTier })
@@ -119,7 +151,7 @@ export async function POST(request: NextRequest) {
       case "invoice.paid":
       case "invoice.payment_failed": {
         const invoice = event.data.object as Stripe.Invoice;
-        // Stripe API ≥ 2025-03 nests this under parent.subscription_details.
+        // Stripe API ≥ 2024-11-20 nests this under parent.subscription_details.
         const sub = invoice.parent?.subscription_details?.subscription ?? null;
         if (sub) {
           const subId = typeof sub === "string" ? sub : sub.id;

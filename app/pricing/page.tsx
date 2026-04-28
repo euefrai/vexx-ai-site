@@ -6,70 +6,13 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import Button from "@/components/ui/Button";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import type { Plan } from "@/lib/plans";
-
-interface PlanCard {
-  id: Plan;
-  name: string;
-  description: string;
-  priceMonthly: string;
-  priceYearly: string;
-  features: string[];
-  highlight: boolean;
-}
-
-const PLANS: PlanCard[] = [
-  {
-    id: "free",
-    name: "Community",
-    description: "Perfeito para indivíduos.",
-    priceMonthly: "R$0",
-    priceYearly: "R$0",
-    features: [
-      "Controle básico do computador",
-      "Agente único",
-      "Suporte a LLMs locais (Ollama)",
-      "Suporte da comunidade",
-    ],
-    highlight: false,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    description: "Para uso profissional diário.",
-    priceMonthly: "R$19",
-    priceYearly: "R$15",
-    features: [
-      "Tudo do Community",
-      "Sistema multi-agente",
-      "Vexx Bridge (controle remoto)",
-      "Memória de longo prazo",
-      "Suporte prioritário",
-    ],
-    highlight: true,
-  },
-  {
-    id: "premium",
-    name: "Premium",
-    description: "Time inteiro, recursos avançados.",
-    priceMonthly: "R$49",
-    priceYearly: "R$39",
-    features: [
-      "Tudo do Pro",
-      "Agentes ilimitados",
-      "Sincronização criptografada",
-      "Integrações avançadas",
-      "Suporte dedicado",
-    ],
-    highlight: false,
-  },
-];
+import { PRICING_PLANS, type PlanTier } from "@/lib/pricing";
 
 export default function PricingPage() {
   const router = useRouter();
   const [isYearly, setIsYearly] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
-  const [busy, setBusy] = useState<Plan | null>(null);
+  const [busy, setBusy] = useState<PlanTier | null>(null);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
@@ -80,7 +23,7 @@ export default function PricingPage() {
     supabase.auth.getUser().then(({ data }) => setAuthed(Boolean(data.user)));
   }, []);
 
-  const startCheckout = async (plan: Plan) => {
+  const startCheckout = async (plan: PlanTier) => {
     if (plan === "free") {
       router.push("/download");
       return;
@@ -93,7 +36,7 @@ export default function PricingPage() {
     const res = await fetch("/api/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, billing: isYearly ? "yearly" : "monthly" }),
     });
     const data = await res.json();
     if (data.url) {
@@ -148,7 +91,7 @@ export default function PricingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-          {PLANS.map((plan, i) => (
+          {PRICING_PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
               initial={{ opacity: 0, y: 12 }}
@@ -175,7 +118,7 @@ export default function PricingPage() {
 
               <div className="mb-6 flex items-baseline gap-1.5">
                 <span className="text-4xl font-semibold tracking-tight text-ink">
-                  {isYearly ? plan.priceYearly : plan.priceMonthly}
+                  {isYearly ? plan.prices.yearly.amount : plan.prices.monthly.amount}
                 </span>
                 <span className="text-sm text-ink-subtle">
                   {plan.id === "free" ? "/ para sempre" : "/ mês"}

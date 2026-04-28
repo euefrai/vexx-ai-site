@@ -11,7 +11,8 @@ import { Mail, Chrome, ArrowRight, CheckCircle2, AlertCircle } from "lucide-reac
 /* ------------------------------------------------------------------ */
 function LoginForm() {
   const params = useSearchParams();
-  const next = params.get("next") ?? "/settings";
+  const rawNext = params.get("next");
+  const next = rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//") ? rawNext : "/settings";
   const urlError = params.get("error");
 
   const [mode, setMode] = useState<"signin" | "signup">("signin");

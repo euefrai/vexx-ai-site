@@ -23,7 +23,10 @@
       "Bash(git push *)",
       "Bash(npx tsc *)",
       "Bash(xargs grep *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(rm -f components/home/Hero.tsx components/home/ChatSimulation.tsx components/home/WhatIsVexx.tsx components/home/FeaturesGrid.tsx public/downloads/README.md push_to_github.bat lib/plans.ts)",
+      "Bash(rmdir public/downloads)",
+      "Bash(ls *.bat)"
     ]
   }
 }
